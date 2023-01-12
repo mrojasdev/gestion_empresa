@@ -10,10 +10,10 @@ package modelos;
  */
 public class Empleado {
     // Atributos clase
-    int idEmpleado;
-    String nombre, apellidos, email;
-    Departamento dpto;
-    float salario;
+    private int idEmpleado;
+    private String nombre, apellidos, email;
+    private Departamento dpto;
+    private float salario;
     
     // Constructores
     public Empleado(int idEmpleado, String nombre, String apellidos, String email, Departamento dpto, float salario) {

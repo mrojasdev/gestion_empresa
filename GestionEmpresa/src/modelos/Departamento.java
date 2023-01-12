@@ -9,8 +9,13 @@ package modelos;
  * @author Manuel Lopez Rojas
  */
 public class Departamento {
-    int idDepartamento;
-    String nombre;
+    private int idDepartamento;
+    private String nombre;
+    
+    public Departamento(){
+        this.idDepartamento = -1;
+        this.nombre = null;
+    }
 
     public Departamento(int idDepartamento, String nombre) {
         this.idDepartamento = idDepartamento;
