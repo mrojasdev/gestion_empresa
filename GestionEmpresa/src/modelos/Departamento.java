@@ -6,7 +6,7 @@ package modelos;
 
 /**
  *
- * @author zormi
+ * @author Manuel Lopez Rojas
  */
 public class Departamento {
     
