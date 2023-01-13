@@ -43,5 +43,13 @@ public class Departamento {
         return "Departamento{" + "idDepartamento=" + idDepartamento + ", nombre=" + nombre + '}';
     }
     
-    
+    // Método isNull, nos devuelve si un departamento es nulo
+    // nombre es nulo e idDepartamento es -1
+    public boolean isNull(){
+        boolean resultado = false;
+        if(this.nombre == null && this.idDepartamento == -1){
+            resultado = true;
+        }
+        return resultado;
+    }
 }
