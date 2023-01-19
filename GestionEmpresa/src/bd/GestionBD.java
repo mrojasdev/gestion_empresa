@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.Departamento;
+import modelos.Departamentos;
 import modelos.Empleado;
 import modelos.Empleados;
 
@@ -152,7 +153,7 @@ public class GestionBD {
     
     // Método modificar empleado
     public boolean modificarEmpleado(Empleado emp, Empleado emp_new) {
-         boolean resultadoModificar=false;
+        boolean resultadoModificar=false;
         try {
             // Conectarnos a la BD
             conectar();
@@ -160,12 +161,12 @@ public class GestionBD {
             Statement stmt = conexion.createStatement();
             // Preparar la sentencia SQL
             String sql = String.format("UPDATE empleados SET nombre='%s', apellidos='%s',"
-                    + " idDepartamento='%s', salario='%s', email='%s' WHERE idEmpleado='%s'; ",
-                    emp.getNombre(),
-                    emp.getApellidos(),
-                    emp.getDpto().getIdDepartamento(),
-                    emp.getSalario(),
-                    emp.getEmail(),
+                    + " idDepartamento= %s, salario= %s, email='%s' WHERE idEmpleado= %s ; ",
+                    emp_new.getNombre(),
+                    emp_new.getApellidos(),
+                    emp_new.getDpto().getIdDepartamento(),
+                    emp_new.getSalario(),
+                    emp_new.getEmail(),
                     emp.getIdEmpleado());
             // Mostramos la consulta por la consola
             System.out.println("Consulta SQL:"+sql);
@@ -182,7 +183,7 @@ public class GestionBD {
     }
     
     public Empleados listarEmpleado(){
-        Empleados listaEmpleados = null;
+        Empleados listaEmpleados = new Empleados();
         try {
             // Conectarnos a la BD
             conectar();
@@ -202,19 +203,115 @@ public class GestionBD {
                         rs.getString("email"),
                         new Departamento(rs.getInt("idDepartamento"), ""),
                         rs.getFloat("salario"));
-                        listaEmpleados.addEmpleado(empleado);
-                insertarEmpleado(empleado);
+                listaEmpleados.addEmpleado(empleado);
             }
             // Cerrar la sentencia
             stmt.close();
             // Cerrar la conexion
             desconectar();
         } catch (SQLException ex) {
-            System.out.println("Error al insertar departamento: "+ex.getMessage());
+            System.out.println("Error al listar empleados: "+ex.getMessage());
         }
         return listaEmpleados;
     }
     
+    public boolean modificarDepartamento(Departamento depto, Departamento depto_new){
+        boolean resultadoModificar=false;
+        try {
+            // Conectarnos a la BD
+            conectar();
+            // Creamos la sentencia
+            Statement stmt = conexion.createStatement();
+            // Preparar la sentencia SQL
+            String sql = String.format("UPDATE departamentos SET nombre='%s' WHERE idDepartamento='%s';",
+                    depto_new.getNombre(),
+                    depto.getIdDepartamento());
+            // Mostramos la consulta por la consola
+            System.out.println("Consulta SQL:"+sql);
+            // Ejecutamos la consulta
+            resultadoModificar = stmt.execute(sql);
+            // Cerrar la sentencia
+            stmt.close();
+            // Cerrar la conexion
+            desconectar();
+        } catch (SQLException ex) {
+            System.out.println("Error al modificar empleado: "+ex.getMessage());
+        }
+        return resultadoModificar;
+    }
     
+    public boolean borrarDepartamento(Departamento depto){
+        boolean resultadoBorrar=false;
+        try {
+            // Conectarnos a la BD
+            conectar();
+            // Creamos la sentencia
+            Statement stmt = conexion.createStatement();
+            // Preparar la sentencia SQL
+            String sql = String.format("DELETE FROM empleados WHERE idEmpleado='%s')"
+                    ,depto.getIdDepartamento());
+            // Mostramos la consulta por la consola
+            System.out.println("Consulta SQL:"+sql);
+            // Ejecutamos la consulta
+            resultadoBorrar = stmt.execute(sql);
+            // Cerrar la sentencia
+            stmt.close();
+            // Cerrar la conexion
+            desconectar();
+        } catch (SQLException ex) {
+            System.out.println("Error al borrar departamento: "+ex.getMessage());
+        }
+        return resultadoBorrar;
+    }
+    
+    public Departamentos listarDepartamentos(){
+        Departamentos listaDepartamentos = new Departamentos();
+        try {
+            // Conectarnos a la BD
+            conectar();
+            // Creamos la sentencia
+            Statement stmt = conexion.createStatement();
+            // Preparar la sentencia SQL
+            String sql = String.format("SELECT * FROM departamentos");
+            // Mostramos la consulta por la consola
+            System.out.println("Consulta SQL:"+sql);
+            // Ejecutamos la consulta
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                        listaDepartamentos.addDepartamento(new Departamento(
+                        rs.getInt("idDepartamento"),
+                        rs.getString("nombre")));
+            }
+            // Cerrar la sentencia
+            stmt.close();
+            // Cerrar la conexion
+            desconectar();
+        } catch (SQLException ex) {
+            System.out.println("Error al listar departamentos: "+ex.getMessage());
+        }
+        return listaDepartamentos;
+    }
+    
+    public Departamento buscarDepartamento(String nombreDepto){
+            Departamento deptoBuscado = null;
+        try {
+            conectar();
+            Statement stmt = conexion.createStatement();
+            String sql = String.format("SELECT * FROM departamentos");
+            System.out.println("Consulta SQL:"+sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                if(rs.getString("idDepartamento") == nombreDepto){
+                    Departamento departamento = new Departamento(
+                            rs.getInt("idDepartamento"),
+                            rs.getString("nombre"));
+                    deptoBuscado = departamento;
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al buscar departamentos: "+ex.getMessage());
+        }
+        return deptoBuscado;
+    }
     
 }

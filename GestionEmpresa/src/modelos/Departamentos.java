@@ -20,11 +20,11 @@ public class Departamentos {
     
     // Métodos SET
     // Añadir
-    void addDepartamento(Departamento dpto){
+    public void addDepartamento(Departamento dpto){
         lista.add(dpto);
     }
     
-    boolean removeDepartamento( int idDep){
+    public boolean removeDepartamento( int idDep){
         boolean encontrado = false;
         for (int i = 0; i < lista.size(); i++) {
             if(lista.get(i).getIdDepartamento() == idDep){
@@ -41,6 +41,7 @@ public class Departamentos {
      * @param idDep id del departamento a buscar.
      * @return el objeto departamento si se encuentra, nulo si no.
      */
+    /*
     Departamento getDepartamento( int idDep){
         Departamento dptoEncontrado = null;
         for (int i = 0; i < lista.size(); i++) {
@@ -50,4 +51,14 @@ public class Departamentos {
         }
         return dptoEncontrado;
     }
+    */
+    
+    public int size(){
+        return lista.size();
+    }
+    
+    public Departamento getDepartamento(int posicion){
+        return lista.get(posicion);
+    }
+    
 }
