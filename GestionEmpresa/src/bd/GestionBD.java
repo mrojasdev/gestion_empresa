@@ -248,7 +248,7 @@ public class GestionBD {
             // Creamos la sentencia
             Statement stmt = conexion.createStatement();
             // Preparar la sentencia SQL
-            String sql = String.format("DELETE FROM empleados WHERE idEmpleado='%s')"
+            String sql = String.format("DELETE FROM departamentos WHERE idDepartamento=%s"
                     ,depto.getIdDepartamento());
             // Mostramos la consulta por la consola
             System.out.println("Consulta SQL:"+sql);

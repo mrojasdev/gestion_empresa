@@ -7,6 +7,7 @@ package interfaz;
 import bd.GestionBD;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import modelos.Departamento;
 import modelos.Departamentos;
 import modelos.Empleados;
 
@@ -99,6 +100,11 @@ public class EmpresaGUI extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        jListEmpleados.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListEmpleadosValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(jListEmpleados);
 
         javax.swing.GroupLayout PanelListadoEmpleadosLayout = new javax.swing.GroupLayout(PanelListadoEmpleados);
@@ -113,7 +119,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
         PanelListadoEmpleadosLayout.setVerticalGroup(
             PanelListadoEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListadoEmpleadosLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -176,7 +182,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(PanelDetalleEmpleadosLayout.createSequentialGroup()
                         .addComponent(txtNombreEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
                         .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDetalleEmpleadosLayout.createSequentialGroup()
@@ -259,6 +265,11 @@ public class EmpresaGUI extends javax.swing.JFrame {
         PanelListadoDepartamentos.setBorder(javax.swing.BorderFactory.createTitledBorder("Listado:"));
 
         jListDeptos.setModel(modeloJlistDeptos);
+        jListDeptos.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListDeptosValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(jListDeptos);
 
         javax.swing.GroupLayout PanelListadoDepartamentosLayout = new javax.swing.GroupLayout(PanelListadoDepartamentos);
@@ -267,13 +278,13 @@ public class EmpresaGUI extends javax.swing.JFrame {
             PanelListadoDepartamentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListadoDepartamentosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                 .addContainerGap())
         );
         PanelListadoDepartamentosLayout.setVerticalGroup(
             PanelListadoDepartamentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListadoDepartamentosLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -292,10 +303,25 @@ public class EmpresaGUI extends javax.swing.JFrame {
         });
 
         btnGuardarDepto.setText("Guardar");
+        btnGuardarDepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarDeptoActionPerformed(evt);
+            }
+        });
 
         btnNuevoDepto.setText("Nuevo");
+        btnNuevoDepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoDeptoActionPerformed(evt);
+            }
+        });
 
         btnBorrarDepto.setText("Borrar");
+        btnBorrarDepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarDeptoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelDetalleDepartamentoLayout = new javax.swing.GroupLayout(PanelDetalleDepartamento);
         PanelDetalleDepartamento.setLayout(PanelDetalleDepartamentoLayout);
@@ -310,7 +336,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
                     .addComponent(txtNombreDepto, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDetalleDepartamentoLayout.createSequentialGroup()
-                .addContainerGap(121, Short.MAX_VALUE)
+                .addContainerGap(122, Short.MAX_VALUE)
                 .addComponent(btnBorrarDepto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNuevoDepto)
@@ -363,7 +389,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -384,6 +410,46 @@ public class EmpresaGUI extends javax.swing.JFrame {
     private void btnNuevoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnNuevoEmpleadoActionPerformed
+
+    private void jListEmpleadosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListEmpleadosValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jListEmpleadosValueChanged
+
+    private void jListDeptosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListDeptosValueChanged
+        mostrarDepartamento(this.jListDeptos.getSelectedIndex());
+    }//GEN-LAST:event_jListDeptosValueChanged
+
+    private void btnNuevoDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoDeptoActionPerformed
+        // Limpiamos los campos del formulario
+        limpiarFormularioDepartamento();
+    }//GEN-LAST:event_btnNuevoDeptoActionPerformed
+
+    private void btnGuardarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarDeptoActionPerformed
+        // Creamos un objeto departamento
+        Departamento depto = new Departamento();
+        // Asignamos los valores de la interfaz
+        // Comprobamos que el id existe y no es cadena "
+        if(!this.txtIdDepto.getText().isBlank()){
+           depto.setIdDepartamento(Integer.parseInt(this.txtIdDepto.getText())); 
+        }
+        depto.setNombre(this.txtNombreDepto.getText());
+        // Llamamos a guardar departamento en la BD
+        guardarDepartamento(depto);
+    }//GEN-LAST:event_btnGuardarDeptoActionPerformed
+
+    private void btnBorrarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarDeptoActionPerformed
+        // Creamos un objeto departamento
+        Departamento depto = new Departamento();
+        // Asignamos valores de interfaz
+        // Comprobamos que el id existe y no es cadena "
+        if(!this.txtIdDepto.getText().isBlank()){
+           depto.setIdDepartamento(Integer.parseInt(this.txtIdDepto.getText())); 
+        }
+        depto.setNombre(this.txtNombreDepto.getText());
+        // Llamamos a borrar departamento en la BD
+        borrarDepartamento(depto);
+        
+    }//GEN-LAST:event_btnBorrarDeptoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -457,12 +523,66 @@ public class EmpresaGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     
     private void cargarDepartamentos(){
+        // Limpiar el listado
+        modeloJlistDeptos.clear();
+        // Actualizar el listado
+        listadoDeptos = conexion.listarDepartamentos();
+        
         // Debemos coger los datos de listadoDeptos y cargarlos en modeloJlistDeptos
         
         for (int i = 0; i < listadoDeptos.size(); i++) {
             // Añadimos cada departamento al jListDeptos
             this.modeloJlistDeptos.addElement(listadoDeptos.getDepartamento(i).getNombre());
         }
+    }
+    
+    private void mostrarDepartamento(int i){
+        if(i>=0){
+            Departamento deptoSel = new Departamento();
+            // Recuperar los datos del departamento
+            deptoSel = this.listadoDeptos.getDepartamento(i);
+            // Establecer cada uno de los datos en los textfield de la interfaz
+            this.txtIdDepto.setText(String.valueOf(deptoSel.getIdDepartamento()));
+            this.txtNombreDepto.setText(deptoSel.getNombre());
+            this.jListDeptos.setSelectedIndex(0);
+        }
+        
+    }
+    
+    // Borrar el contenido de los campos del detalle de Departamentos
+    private void limpiarFormularioDepartamento(){
+        this.txtIdDepto.setText("");
+        this.txtNombreDepto.setText("");
+    }
+    
+    private void guardarDepartamento(Departamento depto){
+        if(depto.getIdDepartamento() == -1){
+            // Comprobar si se trata de un INSERT (Nuevo)
+            conexion.insertarDepartamento(depto);
+            // Actualizamos el listado de deptos
+            cargarDepartamentos();
+            // Mostramos el último departamento insertado
+            this.jListDeptos.setSelectedIndex(this.listadoDeptos.size()-1);
+        }else{
+            // O se trata de un UPDATE (Modificando)
+            conexion.modificarDepartamento(depto, depto);
+            // Guardar la posicion actual jList
+            int posSel = this.jListDeptos.getSelectedIndex();
+            // Actualizamos el listado de deptos
+            cargarDepartamentos();
+            // Establecer posicion anterior del jList
+            this.jListDeptos.setSelectedIndex(posSel);
+        }
+    }
+    
+    private void borrarDepartamento(Departamento depto){
+        if(depto.getIdDepartamento()!=-1){
+            conexion.borrarDepartamento(depto);
+            // Actualizamos el listado de deptos
+            cargarDepartamentos();
+            this.jListDeptos.setSelectedIndex(this.listadoDeptos.size()-1);
+        }
+        
     }
 
 }
