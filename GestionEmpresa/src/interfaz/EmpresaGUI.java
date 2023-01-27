@@ -9,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import modelos.Departamento;
 import modelos.Departamentos;
+import modelos.Empleado;
 import modelos.Empleados;
 
 /**
@@ -34,15 +35,22 @@ public class EmpresaGUI extends javax.swing.JFrame {
     public EmpresaGUI() {
         // Inicializamos los datos de Modelos
         modeloJlistDeptos = new DefaultListModel();
-        initComponents();
+        modeloJlistEmps = new DefaultListModel();
+        modeloComboDeptos = new DefaultComboBoxModel();
         
         // Inicializamos listado deptos
         listadoDeptos = new Departamentos();
         
         // Instanciamos la conexion
         conexion = new GestionBD("localhost","usuario","usuario","empresa",3306);
+        // Cargamos los departamentos y empleados a los objetos
         listadoDeptos = conexion.listarDepartamentos();
+        listadoEmpleados = conexion.listarEmpleado();
         cargarDepartamentos();
+        cargarEmpleados();
+        
+        // Código generado por el diseñador
+        initComponents();
         
         
         
@@ -95,11 +103,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
 
         PanelListadoEmpleados.setBorder(javax.swing.BorderFactory.createTitledBorder("Listado:"));
 
-        jListEmpleados.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jListEmpleados.setModel(modeloJlistEmps);
         jListEmpleados.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jListEmpleadosValueChanged(evt);
@@ -138,6 +142,11 @@ public class EmpresaGUI extends javax.swing.JFrame {
         });
 
         btnGuardarEmpleado.setText("Guardar");
+        btnGuardarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarEmpleadoActionPerformed(evt);
+            }
+        });
 
         btnNuevoEmpleado.setText("Nuevo");
         btnNuevoEmpleado.addActionListener(new java.awt.event.ActionListener() {
@@ -147,12 +156,17 @@ public class EmpresaGUI extends javax.swing.JFrame {
         });
 
         btnBorrarEmpleado.setText("Borrar");
+        btnBorrarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarEmpleadoActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Apellidos");
 
         jLabel6.setText("Departamento:");
 
-        comboDepartamentos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboDepartamentos.setModel(modeloComboDeptos);
 
         jLabel7.setText("Salario");
 
@@ -389,7 +403,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,11 +422,11 @@ public class EmpresaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreEmpleadoActionPerformed
 
     private void btnNuevoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoActionPerformed
-        // TODO add your handling code here:
+        limpiarFormularioEmpleado();
     }//GEN-LAST:event_btnNuevoEmpleadoActionPerformed
 
     private void jListEmpleadosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListEmpleadosValueChanged
-        // TODO add your handling code here:
+        mostrarEmpleado(jListEmpleados.getSelectedIndex());
     }//GEN-LAST:event_jListEmpleadosValueChanged
 
     private void jListDeptosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListDeptosValueChanged
@@ -450,6 +464,35 @@ public class EmpresaGUI extends javax.swing.JFrame {
         borrarDepartamento(depto);
         
     }//GEN-LAST:event_btnBorrarDeptoActionPerformed
+
+    private void btnBorrarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarEmpleadoActionPerformed
+        // Crear un objeto Empleado
+        Empleado emp = new Empleado();
+        // Asignamos valores de la interfaz
+        if(!txtIdEmpleado.getText().isEmpty()){ // Si no es vacio - No es nuevo
+            emp.setIdEmpleado(Integer.parseInt(txtIdEmpleado.getText()));
+        }
+        // Asignamos valores de interfaz en objeto Empleado
+        borrarEmpleado(emp);
+    }//GEN-LAST:event_btnBorrarEmpleadoActionPerformed
+
+    private void btnGuardarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEmpleadoActionPerformed
+        // Crear un objeto Empleado
+        Empleado emp = new Empleado();
+        // Asignamos valores de la interfaz
+        // Comprobar que no es un empleado nuevo, es decir, id Empleado es distinto de "" o -1
+        if(!txtIdEmpleado.getText().isEmpty()){
+            emp.setIdEmpleado(Integer.parseInt(txtIdEmpleado.getText()));
+        }
+        // Almaceno en el objeto emp cada uno de los textfield de la interfaz
+        emp.setNombre(txtNombreEmpleado.getText());
+        emp.setApellidos(txtApellidosEmpleado.getText());
+        emp.setEmail(txtEmailEmpleado.getText());
+        emp.setSalario(Float.parseFloat(spinnerSalarioEmpleado.getValue().toString()));
+        emp.setDpto(listadoDeptos.getDepartamento(comboDepartamentos.getSelectedIndex()));
+        // Pasamos el obketo empleado a guardar
+        guardarEmpleado(emp);
+    }//GEN-LAST:event_btnGuardarEmpleadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -525,6 +568,7 @@ public class EmpresaGUI extends javax.swing.JFrame {
     private void cargarDepartamentos(){
         // Limpiar el listado
         modeloJlistDeptos.clear();
+        modeloComboDeptos.removeAllElements();
         // Actualizar el listado
         listadoDeptos = conexion.listarDepartamentos();
         
@@ -532,7 +576,21 @@ public class EmpresaGUI extends javax.swing.JFrame {
         
         for (int i = 0; i < listadoDeptos.size(); i++) {
             // Añadimos cada departamento al jListDeptos
-            this.modeloJlistDeptos.addElement(listadoDeptos.getDepartamento(i).getNombre());
+            modeloJlistDeptos.addElement(listadoDeptos.getDepartamento(i).getNombre());
+            modeloComboDeptos.addElement(listadoDeptos.getDepartamento(i).getNombre());
+        }
+    }
+    
+    private void cargarEmpleados(){
+        // Limpiar el modelo de empleados
+        modeloJlistEmps.clear();
+        // Actualizar el listado de empleados
+        listadoEmpleados =  conexion.listarEmpleado();
+        
+        // Meterlo en el jList
+        for (int i = 0; i < listadoEmpleados.size(); i++) {
+            // Añadimos cada empleado al modelo
+            modeloJlistEmps.addElement(listadoEmpleados.getEmpleado(i).getNombre());
         }
     }
     
@@ -583,6 +641,58 @@ public class EmpresaGUI extends javax.swing.JFrame {
             this.jListDeptos.setSelectedIndex(this.listadoDeptos.size()-1);
         }
         
+    }
+    
+    private void limpiarFormularioEmpleado(){
+        txtIdEmpleado.setText("");
+        txtNombreEmpleado.setText("");
+        txtApellidosEmpleado.setText("");
+        txtEmailEmpleado.setText("");
+        comboDepartamentos.setSelectedItem(null);
+        spinnerSalarioEmpleado.setValue(950);
+    }
+    
+    private void mostrarEmpleado(int i){
+        if(i>=0){
+            Empleado empSel = new Empleado();
+            // Recuperar los datos del Empleado
+            empSel = listadoEmpleados.getEmpleado(i);
+            // Asignar a los elementos de la GUI los valores del objeto Empleado
+            txtIdEmpleado.setText(String.valueOf(empSel.getIdEmpleado()));
+            txtNombreEmpleado.setText(empSel.getNombre());
+            txtApellidosEmpleado.setText(empSel.getApellidos());
+            txtEmailEmpleado.setText(empSel.getEmail());
+            spinnerSalarioEmpleado.setValue(empSel.getSalario());
+            comboDepartamentos.setSelectedItem(empSel.getDpto().getNombre());
+        }
+    }
+    
+    private void borrarEmpleado(Empleado emp){
+        // Comprobar que el empleado a borrar tenga un id válido
+        if(emp.getIdEmpleado()>-1){
+            conexion.borrarEmpleado(emp);
+            // Cargar el listado de empleados
+            cargarEmpleados();
+            // Seleccionar el ultimo empleado
+            jListEmpleados.setSelectedIndex(this.listadoEmpleados.size()-1);
+        }
+    }
+    
+    private void guardarEmpleado(Empleado emp){
+        if(emp.getIdEmpleado()==-1){ // Empleado NUEVO
+            conexion.insertarEmpleado(emp);
+            // Cargamos los empleados ya que puede haber uno nuevo
+            cargarEmpleados();
+            jListEmpleados.setSelectedIndex(listadoEmpleados.size()-1);
+        }else{ // Modificación
+            conexion.modificarEmpleado(emp, emp);
+            // Guardamos la posicion
+            int posSel = jListEmpleados.getSelectedIndex();
+            // Cargamos el listado de empleados
+            cargarEmpleados();
+            // Establecemos la posicion del empleado modificado
+            jListEmpleados.setSelectedIndex(posSel);
+        }
     }
 
 }

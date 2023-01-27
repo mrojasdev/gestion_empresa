@@ -19,6 +19,7 @@ public class Empleados {
     }
     
     // Métodos GET
+    /*
     public Empleado getEmpleado(int idEmpleado){
         Empleado encontrado = null;
         // Recorremos el listado de empleados
@@ -30,6 +31,10 @@ public class Empleados {
         }
         return encontrado;
     }
+*/
+    public Empleado getEmpleado(int posicion){
+        return lista.get(posicion);
+    }
     
     // Método SET
     public boolean removeEmpleado(int idEmpleado){
@@ -40,4 +45,7 @@ public class Empleados {
         return lista.add(emp);
     }
     
+    public int size(){
+        return lista.size();
+    }
 }

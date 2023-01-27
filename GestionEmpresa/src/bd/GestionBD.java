@@ -135,7 +135,7 @@ public class GestionBD {
             // Creamos la sentencia
             Statement stmt = conexion.createStatement();
             // Preparar la sentencia SQL
-            String sql = String.format("DELETE FROM empleados WHERE idEmpleado='%s')"
+            String sql = String.format("DELETE FROM empleados WHERE idEmpleado=%s"
                     ,emp.getIdEmpleado());
             // Mostramos la consulta por la consola
             System.out.println("Consulta SQL:"+sql);
@@ -312,6 +312,45 @@ public class GestionBD {
             System.err.println("Error al buscar departamentos: "+ex.getMessage());
         }
         return deptoBuscado;
+    }
+    
+    /**
+     * Comprueba si el código recibido por parámetro coincide con el de un administrador y si es así devuelve 0.
+     * Si no, comprueba si coincide con el de un empleado y si es así devuelve el propio código. Si no, devuelve -1.
+     * @param codigoIntroducido el código introducido por el usuario
+     * @return 1 si es administrador, el código si es empleado y -1 si no existe.
+     */
+    public int verificarCodigo(String codigoIntroducido){
+        int codigo = Integer.parseInt(codigoIntroducido);
+        try{
+            // Nos conectamos a la base de datos y comprobamos si el código pertenece a un administrador
+            conectar();
+            Statement stmt = conexion.createStatement();
+            String sql = String.format("SELECT * FROM administradores WHERE codAdmin = %s", codigo);
+            ResultSet rs = stmt.executeQuery(sql);
+            // Si el código coincide con el de un administrador, se devuelve 1 para notificarlo
+            if(rs.next()){
+               codigo = 1;
+            }else{ // Si no coincide, miramos si el código pertenece a un empleado
+                // Cerramos la consulta anterior
+                stmt.close();
+                rs.close();
+                // Creamos una nueva consulta para saber si el código pertenece a un empleado
+                stmt = conexion.createStatement();
+                sql = String.format("SELECT * FROM empleados WHERE codEmpleado = %s", codigo);
+                System.out.println("Consulta SQL: "+sql);
+                rs = stmt.executeQuery(sql);
+                if(!rs.next()){ // Si la consulta no devuelve ningún resultado, se devuelve -1 para notificar que es incorrecto
+                    codigo = -1;
+                } 
+            }
+            // Se cierra la conexión con la base de datos
+            stmt.close();
+            desconectar();
+        }catch(SQLException ex){
+            System.err.println("Error al buscar el código de empleado");
+        }
+        return codigo;
     }
     
 }
